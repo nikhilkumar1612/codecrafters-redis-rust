@@ -14,13 +14,21 @@ fn main() {
             Ok(mut _stream) => {
                 println!("accepted new connection");
                 let mut buf = [0; 512];
-                _stream.read(&mut buf).unwrap();
 
-                _stream.write(b"+PONG\r\n").unwrap();
+                loop {
+                    let read_count = _stream.read(&mut buf).unwrap();
+                    println!("{}", read_count);
+                    if read_count == 0 {
+                        break;
+                    }
+                    _stream.write(b"+PONG\r\n").unwrap();
+                }
             }
             Err(e) => {
                 println!("error: {}", e);
             }
         }
     }
+
+    println!("ending mainnnnn");
 }
